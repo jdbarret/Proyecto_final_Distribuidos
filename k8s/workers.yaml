@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workers
+  namespace: prime-system
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: worker
+  template:
+    metadata:
+      labels:
+        app: worker
+    spec:
+      containers:
+      - name: worker
+        image: your-registry/prime-worker:latest
+        imagePullPolicy: Always
+        env:
+        - name: DB_HOST
+          value: postgres
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: prime-config
+              key: DB_PORT
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: prime-config
+              key: DB_NAME
+        - name: DB_USER
+          valueFrom:
+            configMapKeyRef:
+              name: prime-config
+              key: DB_USER
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: prime-secrets
+              key: DB_PASSWORD
+        - name: RABBITMQ_HOST
+          value: rabbitmq
+        - name: RABBITMQ_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: prime-config
+              key: RABBITMQ_PORT
+        - name: RABBITMQ_USER
+          valueFrom:
+            configMapKeyRef:
+              name: prime-config
+              key: RABBITMQ_USER
+        - name: RABBITMQ_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: prime-secrets
+              key: RABBITMQ_PASSWORD
+        - name: RABBITMQ_QUEUE
+          valueFrom:
+            configMapKeyRef:
+              name: prime-config
+              key: RABBITMQ_QUEUE
+        - name: WORKER_ID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: PREFETCH_COUNT
+          valueFrom:
+            configMapKeyRef:
+              name: prime-config
+              key: PREFETCH_COUNT

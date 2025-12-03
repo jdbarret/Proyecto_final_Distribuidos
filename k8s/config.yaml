@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prime-config
+  namespace: prime-system
+data:
+  DB_NAME: "primes_db"
+  DB_USER: "postgres"
+  DB_PORT: "5432"
+  RABBITMQ_PORT: "5672"
+  RABBITMQ_USER: "guest"
+  RABBITMQ_QUEUE: "prime_requests"
+  API_HOST: "0.0.0.0"
+  API_PORT: "8000"
+  PREFETCH_COUNT: "1"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: prime-secrets
+  namespace: prime-system
+type: Opaque
+stringData:
+  DB_PASSWORD: "postgres"
+  RABBITMQ_PASSWORD: "guest"
