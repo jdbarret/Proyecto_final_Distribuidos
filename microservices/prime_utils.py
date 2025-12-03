@@ -6,6 +6,10 @@ import random
 import secrets
 
 
+# Small primes for quick divisibility check
+SMALL_PRIMES = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47]
+
+
 def is_prime_miller_rabin(n, k=40):
     """
     Miller-Rabin primality test with k rounds
@@ -48,7 +52,8 @@ def generate_prime_candidate(digits):
     """
     lower_bound = 10 ** (digits - 1)
     upper_bound = (10 ** digits) - 1
-    return secrets.randbelow(upper_bound - lower_bound) + lower_bound
+    # Ensure we generate a number in the correct range
+    return secrets.randbelow(upper_bound - lower_bound + 1) + lower_bound
 
 
 def generate_prime(digits):
@@ -67,14 +72,13 @@ def generate_prime(digits):
             continue
             
         # Check divisibility by small primes for efficiency
-        small_primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47]
-        if candidate in small_primes:
+        if candidate in SMALL_PRIMES:
             if len(str(candidate)) == digits:
                 return candidate
             continue
         
         is_divisible = False
-        for p in small_primes:
+        for p in SMALL_PRIMES:
             if candidate % p == 0:
                 is_divisible = True
                 break

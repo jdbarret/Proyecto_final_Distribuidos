@@ -4,6 +4,7 @@ Provides three endpoints: New, Status, and Result
 """
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
+from contextlib import asynccontextmanager
 import pika
 import json
 import logging
@@ -20,10 +21,30 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Lifespan context manager for startup and shutdown events"""
+    # Startup
+    try:
+        db.init_db_pool()
+        logger.info("Application started successfully")
+    except Exception as e:
+        logger.error(f"Error during startup: {e}")
+        raise
+    
+    yield
+    
+    # Shutdown
+    db.close_db_pool()
+    logger.info("Application shutdown complete")
+
+
 app = FastAPI(
     title="Prime Number Generation Microservice",
     description="API for requesting and retrieving prime number generation",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
 
@@ -91,24 +112,6 @@ def send_to_queue(request_id: str, quantity: int, digits: int):
     except Exception as e:
         logger.error(f"Error sending to queue: {e}")
         raise
-
-
-@app.on_event("startup")
-async def startup_event():
-    """Initialize database connection pool on startup"""
-    try:
-        db.init_db_pool()
-        logger.info("Application started successfully")
-    except Exception as e:
-        logger.error(f"Error during startup: {e}")
-        raise
-
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    """Close database connections on shutdown"""
-    db.close_db_pool()
-    logger.info("Application shutdown complete")
 
 
 @app.get("/")

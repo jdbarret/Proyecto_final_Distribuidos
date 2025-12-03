@@ -67,7 +67,8 @@ def process_message(ch, method, properties, body):
         
         if retry_count >= max_retries:
             logger.error(f"[{WORKER_ID}] Failed to generate unique prime after {max_retries} attempts")
-            ch.basic_nack(delivery_tag=method.delivery_tag, requeue=True)
+            # Reject without requeue to prevent infinite loops
+            ch.basic_nack(delivery_tag=method.delivery_tag, requeue=False)
             return
         
         # Acknowledge message
