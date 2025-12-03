@@ -15,7 +15,8 @@ spec:
       protocol: TCP
       port: 15672
       targetPort: 15672
-  type: ClusterIP
+      nodePort: 30672
+  type: NodePort
 ---
 apiVersion: apps/v1
 kind: Deployment
