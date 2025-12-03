@@ -39,7 +39,7 @@ echo "[8/8] Desplegando workers..."
 kubectl apply -f k8s/workers.yaml
 
 echo ""
-echo "✓ Despliegue completado!"
+echo "Despliegue completado!"
 echo ""
 echo "Verificar estado:"
 kubectl get all -n prime-system
