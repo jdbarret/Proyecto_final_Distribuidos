@@ -8,7 +8,7 @@ echo ""
 
 # 1. Namespace
 echo "[1/8] Creando namespace..."
-kubectl apply -f k8s/namespace. yaml
+kubectl apply -f k8s/namespace.yaml
 
 # 2. Config
 echo "[2/8] Aplicando configuración..."
