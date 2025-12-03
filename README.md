@@ -1,15 +1,59 @@
-# Sistema Distribuido de Generación de Números Primos
+# Proyecto final Sistemas Distribuidos - Generador de numeros primos 
 
-Sistema cloud-native de microservicios para la generación distribuida de números primos grandes con arquitectura basada en eventos.
+# Nombres - Códigos
+Laura Vanessa Hernández García - 160004630
+Jose Daniel Barreto Aguilera - 160004622
 
-## 📋 Descripción
+# Instrucciones de uso y despliegue
 
-Este proyecto implementa una arquitectura de microservicios para generar números primos de forma distribuida utilizando:
-- **Microservicios API**: FastAPI para endpoints REST
-- **Workers**: Procesadores asíncronos para generación de primos
-- **Cola de Mensajes**: RabbitMQ para comunicación asíncrona
-- **Base de Datos**: PostgreSQL para almacenamiento persistente
-- **Orquestación**: Kubernetes para despliegue y escalado
+Para desplegar el generador de numeros primos, primero ingresar a:
+https://killercoda.com/playgrounds/scenario/kubernetes   
+(Se requiere inicio de sesión)
+
+Se abrirá una terminal de comandos, donde inicialmente se obtendrá el repositorio del proyecto
+
+# Ejecutar el siguiente comando
+git clone https://github.com/jdbarret/Proyecto_final_Distribuidos.git 
+
+# Dirigirse al directorio
+cd Proyecto_final_Distribuidos
+
+# Ahora se ejecutan una serie de comandos, que para mayor facilidad se ejecutan en un script
+
+chmod +x script-arranque.sh
+
+./script-arranque.sh
+
+Verificar que todos digan running y estamos listo para probar el sistema.
+
+Para probar el sistema debemos hacer peticiones a la api
+
+# Crear un request
+Para crear un request es necesario crear la siguiente petición donde podemos definir la cantidad de números primos
+a generar y los dígitos que deseamos en cada número
+
+curl -X POST http://localhost:8000/api/new \ 
+    -H "Content-Type: application/json" \ 
+    -d '{"quantity": 5, "digits": 12}'
+
+Luego al enviar esta petición recibiremos una respuesta la cual nos retorna un request_id, el cual vamos a usar para 
+ver el status de la petición
+
+curl http://localhost:8000/api/status/{request_id}
+
+Luego ya podremos ver los resultados del generador de números primos, donde también especifiquemos el request_id.
+
+curl http://localhost:8000/api/result/{request_id}
+
+
+
+
+
+
+
+
+
+
 
 ## 🏗️ Arquitectura
 
