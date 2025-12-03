@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
       - name: microservices
-        image: jdbprod/prime-microservices:latest
+        image: jdprod/prime-microservices:latest
         imagePullPolicy: Always
         env:
         - name: DB_HOST

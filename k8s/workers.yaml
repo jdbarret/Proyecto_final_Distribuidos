@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: worker
-        image: jdbprod/prime-worker:latest
+        image: jdprod/prime-worker:latest
         imagePullPolicy: Always
         env:
         - name: DB_HOST
